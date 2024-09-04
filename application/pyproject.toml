@@ -1,0 +1,128 @@
+[tool.poetry]
+authors = ["Aiful Inc, <engineering@pj100.biz>"]
+description = ""
+name = "project"
+version = "0.1.0"
+
+[tool.poetry.dependencies]
+boto3 = "^1.26.133"
+django = "^4.2.14"
+django-cors-headers = "^4.0.0"
+django-filter = "^23.1"
+django-ulid = "^0.0.4"
+djangorestframework = "^3.15.0"
+drf-nested-routers = "^0.93.4"
+gunicorn = "^22.0.0"
+mysqlclient = "^2.1.1"
+pydantic-settings = "^2.0.3"
+python = "3.11.2"
+requests = "^2.31.0"
+
+[tool.poetry.dev-dependencies]
+black = "^24.0.0"
+django-debug-toolbar = "^4.2.0"
+django-extensions = "^3.2.1"
+django-rest-swagger = "^2.2.0"
+drf-spectacular = "^0.27.0"
+factory-boy = "^3.2.1"
+freezegun = "^1.2.2"
+isort = "^5.10.1"
+pytest = "^8.0.0"
+pytest-clarity = "^1.0.1"
+pytest-cov = "^5.0.0"
+pytest-custom-exit-code = "^0.3.0"
+pytest-django = "^4.5.2"
+pytest-github-actions-annotate-failures = "^0.2.0"
+pytest-mock = "^3.10.0"
+pytest-randomly = "^3.12.0"
+pytest-xdist = "^3.3.1"
+
+[tool.isort]
+line_length = 79
+profile = "black"
+
+[tool.black]
+exclude = '''
+(
+    /(
+        \.eggs         # exclude a few common directories in the
+    |   \.git          # root of the project
+    |   \.hg
+    |   \.mypy_cache
+    |   \.tox
+    |   \.venv
+    | _build
+    | buck-out
+    | build
+    | dist
+    )/
+)
+'''
+include = '\.py$'
+line-length = 79
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "project.settings.local"
+addopts = "-vv --diff-width=60 -s --durations=0"
+
+[build-system]
+build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core"]
+
+# logの設定（local環境）
+[local.logging]
+version = 1
+[local.logging.formatters.simple]
+format = "[%(levelname)s] %(name)s %(asctime)s - %(message)s "
+[local.logging.handlers.consoleHandler]
+class = "logging.StreamHandler"
+formatter = "simple"
+level = "DEBUG"
+stream = "ext://sys.stdout"
+[local.logging.handlers.applicationHandler]
+class = "logging.handlers.TimedRotatingFileHandler"
+filename = "./output/application.log"
+formatter = "simple"
+level = "INFO"
+when = "D"
+[local.logging.handlers.errorHandler]
+class = "logging.handlers.TimedRotatingFileHandler"
+filename = "./output/emergency.log"
+formatter = "simple"
+level = "ERROR"
+when = "D"
+[local.logging.loggers.console]
+handlers = ["consoleHandler"]
+level = "DEBUG"
+propagate = "no"
+[local.logging.loggers.application]
+handlers = ["consoleHandler", "applicationHandler"]
+level = "DEBUG"
+propagate = "no"
+[local.logging.loggers.emergency]
+handlers = ["consoleHandler", "errorHandler"]
+level = "DEBUG"
+propagate = "no"
+
+# logの設定（dev環境）
+[dev.logging]
+version = 1
+[dev.logging.formatters.simple]
+format = "[%(levelname)s] %(name)s - %(message)s "
+[dev.logging.handlers.consoleHandler]
+class = "logging.StreamHandler"
+formatter = "simple"
+level = "DEBUG"
+stream = "ext://sys.stdout"
+[dev.logging.loggers.console]
+handlers = ["consoleHandler"]
+level = "DEBUG"
+propagate = "no"
+[dev.logging.loggers.application]
+handlers = ["consoleHandler"]
+level = "DEBUG"
+propagate = "no"
+[dev.logging.loggers.emergency]
+handlers = ["consoleHandler"]
+level = "DEBUG"
+propagate = "no"
