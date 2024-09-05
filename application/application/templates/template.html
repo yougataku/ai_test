@@ -1,0 +1,36 @@
+<!-- template.html -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>非同期フォーム送信</title>
+</head>
+<body>
+    <form id="myForm">
+        <input type="text" name="name" placeholder="名前">
+        <input type="email" name="email" placeholder="メール">
+        <button type="submit">送信</button>
+    </form>
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('myForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const form = event.target;
+            const formData = new FormData(form);
+
+            try {
+                const response = await fetch('/api/submit-form/', {
+                    method: 'POST',
+                    body: formData,
+                });
+                const result = await response.json();
+                document.getElementById('result').innerText = result.message;
+            } catch (error) {
+                document.getElementById('result').innerText = 'エラーが発生しました。';
+            }
+        });
+    </script>
+</body>
+</html>
