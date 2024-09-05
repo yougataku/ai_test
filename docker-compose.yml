@@ -9,6 +9,8 @@ services:
     # M1チップでも動くように
     platform: linux/x86_64
     # ローカルの/data/dbをコンテナの/var/lib/mysqlにマウンティング
+    ports:
+      - "3306:3306"
     volumes:
       - db_data:/var/lib/mysql
     # 環境変数

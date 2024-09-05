@@ -1,11 +1,8 @@
-from django.urls import include, path
-from rest_framework.routers import DefaultRouter
-
-from application.views.common.health_check import health_check
-
-router = DefaultRouter(trailing_slash=False)
+# urls.py
+from django.urls import path
+from .views import views
 
 urlpatterns = [
-    path("", include(router.urls)),
-    path(r"health", health_check, name="health"),
+    path('upload/', views.upload_file, name='upload_file'),
+    path('files/', views.file_list, name='file_list'),
 ]
