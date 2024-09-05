@@ -147,6 +147,9 @@ USE_I18N = True
 
 USE_TZ = True
 
+LOGIN_REDIRECT_URL = 'home'
+LOGIN_URL = 'login'
+LOGOUT_REDIRECT_URL = 'login'
 
 # STATIC_ROOTを設定
 STATIC_ROOT = "/static/"
