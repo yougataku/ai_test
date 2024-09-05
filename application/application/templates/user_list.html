@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User List</title>
+    <script>
+
+        function addRow(userId,username) {
+          var newRow = document.createElement('tr');
+          newRow.id=`user-${userId}`;
+          newRow.innerHTML = `<td>${userId}</td><td id="username-${userId}">${username}</td><td><button onclick="editUser(${userId})">Edit</button><button onclick="deleteUser(${userId})">Delete</button></td>`;
+          document.getElementById('table').appendChild(newRow);
+        }
+
+        async function addUser() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const email = document.getElementById('email').value;
+
+            const response = await fetch('/api/users/add/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({
+                    username: username,
+                    password: password,
+                    email: email
+                })
+            });
+
+            const result = await response.json();
+            if (result.status === 'success') {
+                userId=result["user"]["id"];
+                addRow(userId,username);
+            }
+        }
+
+        async function editUser(userId) {
+            const username = prompt("Enter new username:");
+            if (!username) return;
+
+            const response = await fetch(`/api/users/edit/${userId}/`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({ username: username })
+            });
+
+            const result = await response.json();
+            if (result.status === 'success') {
+                document.getElementById(`username-${userId}`).innerHTML = username;
+            }
+        }
+
+        async function deleteUser(userId) {
+            const response = await fetch(`/api/users/delete/${userId}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                }
+            });
+
+            const result = await response.json();
+            if (result.status === 'success') {
+                document.getElementById(`user-${userId}`).remove();
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>User List</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="table">
+            {% for user in users %}
+            <tr id="user-{{ user.id }}">
+                <td>{{ user.id }}</td>
+                <td id="username-{{ user.id }}">{{ user.username }}</td>
+                <td>
+                    <button onclick="editUser({{ user.id }})">Edit</button>
+                    <button onclick="deleteUser({{ user.id }})">Delete</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <h2>Add User</h2>
+    <form onsubmit="event.preventDefault(); addUser();">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+        <br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        <br>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email">
+        <br>
+        <button type="submit">Add User</button>
+    </form>
+    {% if user.is_authenticated %}
+        <a href="{% url 'logout' %}">Logout</a>
+    {% endif %}
+
+</body>
+</html>

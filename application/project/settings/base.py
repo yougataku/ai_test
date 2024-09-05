@@ -151,6 +151,9 @@ USE_TZ = True
 # STATIC_ROOTを設定
 STATIC_ROOT = "/static/"
 STATIC_URL = "/static/"
+LOGIN_REDIRECT_URL = 'users'
+LOGIN_URL = 'login'
+LOGOUT_REDIRECT_URL = 'login'
 
 LOGGING = {
     "version": 1,
