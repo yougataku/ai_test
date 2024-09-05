@@ -1,11 +1,10 @@
-from django.urls import include, path
-from rest_framework.routers import DefaultRouter
-
+from django.urls import path
+from .views.views import home_view, contact_view, services_view
 from application.views.common.health_check import health_check
 
-router = DefaultRouter(trailing_slash=False)
-
 urlpatterns = [
-    path("", include(router.urls)),
-    path(r"health", health_check, name="health"),
+    path("", home_view, name="home"),
+    path("contact/", contact_view, name="contact"),
+    path("services/", services_view, name="services"),
+    path("health", health_check, name="health"),
 ]
