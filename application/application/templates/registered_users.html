@@ -1,0 +1,7 @@
+<!-- registered_users.html -->
+<h1>Registered Users</h1>
+<ul>
+    {% for user in registered_users %}
+    <li>{{ user.first_name }} {{ user.last_name }} ({{ user.email }})</li>
+    {% endfor %}
+</ul>
