@@ -152,6 +152,10 @@ USE_TZ = True
 STATIC_ROOT = "/static/"
 STATIC_URL = "/static/"
 
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'home'
+
+
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Protected Page</title>
+    <!-- Add any additional CSS or JavaScript files here -->
+</head>
+<body>
+    <header>
+        <!-- Add your header content here -->
+        <nav>
+            <ul>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'logout' %}">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h1>Protected Page</h1>
+        <p>This page is only accessible to authenticated users.</p>
+        <!-- Add your protected content here -->
+    </main>
+
+    <footer>
+        <!-- Add your footer content here -->
+    </footer>
+</body>
+</html>
